@@ -10,6 +10,10 @@
 
 **Continuous Claude** transforms Claude Code into a continuously learning system that maintains context across sessions, orchestrates specialized agents, and eliminates wasting tokens through intelligent code analysis.
 
+📖 **New to this repository?** Check out our comprehensive analysis reports:
+- [中文版仓库分析报告](./Continuous-Claude仓库分析报告.md) - 完整的中文原理和使用指南
+- [English Repository Analysis Report](./REPOSITORY_ANALYSIS_REPORT.md) - Complete guide in English
+
 ## Table of Contents
 
 - [Why Continuous Claude?](#why-continuous-claude)
