@@ -1,100 +1,81 @@
-# Continuous Claude
+# Continuous Claude Repository Analysis Report
 
 > A persistent, learning, multi-agent development environment built on Claude Code
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Claude Code](https://img.shields.io/badge/Claude-Code-orange.svg)](https://claude.ai/code)
-[![Skills](https://img.shields.io/badge/Skills-109-green.svg)](#skills-system)
-[![Agents](https://img.shields.io/badge/Agents-32-purple.svg)](#agents-system)
-[![Hooks](https://img.shields.io/badge/Hooks-30-blue.svg)](#hooks-system)
-
-**Continuous Claude** transforms Claude Code into a continuously learning system that maintains context across sessions, orchestrates specialized agents, and eliminates wasting tokens through intelligent code analysis.
-
-📖 **New to this repository?** Check out our comprehensive analysis reports:
-- [中文版仓库分析报告](./Continuous-Claude仓库分析报告.md) - 完整的中文原理和使用指南
-- [English Repository Analysis Report](./REPOSITORY_ANALYSIS_REPORT.md) - Complete guide in English
+---
 
 ## Table of Contents
 
-- [Why Continuous Claude?](#why-continuous-claude)
-- [Design Principles](#design-principles)
-- [How to Talk to Claude](#how-to-talk-to-claude)
-- [Quick Start](#quick-start)
-- [Architecture](#architecture)
-- [Core Systems](#core-systems)
-  - [Skills (109)](#skills-system)
-  - [Agents (32)](#agents-system)
-  - [Hooks (30)](#hooks-system)
-  - [TLDR Code Analysis](#tldr-code-analysis)
-  - [Memory System](#memory-system)
-  - [Continuity System](#continuity-system)
-  - [Math System](#math-system)
-- [Workflows](#workflows)
-- [Installation](#installation)
-- [Updating](#updating)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
+- [1. System Overview](#1-system-overview)
+- [2. Core Design Principles](#2-core-design-principles)
+- [3. Core Architecture](#3-core-architecture)
+- [4. Main Components](#4-main-components)
+- [5. Workflows](#5-workflows)
+- [6. Quick Start](#6-quick-start)
+- [7. Usage Guide](#7-usage-guide)
+- [8. Technology Stack](#8-technology-stack)
 
 ---
 
-## Why Continuous Claude?
+## 1. System Overview
 
-Claude Code has a **compaction problem**: when context fills up, the system compacts your conversation, losing nuanced understanding and decisions made during the session.
+### 1.1 What is Continuous Claude?
 
-**Continuous Claude solves this with:**
+**Continuous Claude** is a development environment that transforms Claude Code into a continuously learning system. It solves the core problem in AI-assisted programming: **context loss** — through intelligent code analysis, context management, and specialized agent coordination.
 
-| Problem | Solution |
-|---------|----------|
+### 1.2 Core Problems and Solutions
+
+| Problem | Continuous Claude's Solution |
+|---------|----------------------------|
 | Context loss on compaction | YAML handoffs - more token-efficient transfer |
-| Starting fresh each session | Memory system recalls + daemon auto-extracts learnings |
-| Reading entire files burns tokens | 5-layer code analysis + semantic index |
+| Starting fresh each session | Memory system + daemon auto-extracts learnings |
+| Reading entire files burns tokens | 5-layer code analysis + semantic index (95% token savings) |
 | Complex tasks need coordination | Meta-skills orchestrate agent workflows |
 | Repeating workflows manually | 109 skills with natural language triggers |
 
-**The mantra: Compound, don't compact.** Extract learnings automatically, then start fresh with full context.
+### 1.3 Key Metrics
 
-### Why "Continuous"? Why "Compounding"?
-
-The name is a pun. **Continuous** because Claude maintains state across sessions. **Compounding** because each session makes the system smarter—learnings accumulate like compound interest.
+- **Skills**: 109 modular capabilities
+- **Agents**: 32 specialized sub-assistants
+- **Hooks**: 30 lifecycle interceptors
+- **Token Savings**: 95% reduction (TLDR analysis)
 
 ---
 
-## Design Principles
+## 2. Core Design Principles
 
-An agent is five things: **Prompt + Tools + Context + Memory + Model**.
+### 2.1 Five-Element Architecture
 
-| Component | What We Optimize |
-|-----------|------------------|
+An agent consists of five elements: **Prompt + Tools + Context + Memory + Model**
+
+| Component | Continuous Claude's Optimization |
+|-----------|--------------------------------|
 | **Prompt** | Skills inject relevant context; hooks add system reminders |
 | **Tools** | TLDR reduces tokens; agents parallelize work |
 | **Context** | Not just *what* Claude knows, but *how* it's provided |
 | **Memory** | Daemon extracts learnings; recall surfaces them |
 | **Model** | Becomes swappable when the other four are solid |
 
-### Anti-Complexity
+### 2.2 Core Principles
 
-We resist plugin sprawl. Every MCP, subscription, and tool you add promises improvement but risks breaking context, tools, or prompts through clashes.
+#### "Compound, don't compact"
 
-**Our approach:**
-- **Time, not money** — No required paid services. Perplexity and NIA are optional, high-value-per-token.
-- **Learn, don't accumulate** — A system that learns handles edge cases better than one that collects plugins.
-- **Shift-left validation** — Hooks run pyright/ruff after edits, catching errors before tests.
+- Automatically extract learnings
+- Start fresh with full context
+- Each session makes the system smarter
 
-The failure modes of complex systems are structurally invisible until they happen. A learning, context-efficient system doesn't prevent all failures—but it recovers and improves.
+#### Anti-Complexity
 
----
+- **Time, not money** — No required paid services (Perplexity and NIA are optional)
+- **Learn, don't accumulate** — A learning system handles edge cases better than plugin sprawl
+- **Shift-left validation** — Hooks run pyright/ruff after edits, catching errors before tests
 
-## How to Talk to Claude
+### 2.3 Skill Activation System
 
-**You don't need to memorize slash commands.** Just describe what you want naturally.
-
-### The Skill Activation System
-
-When you send a message, a hook injects context that tells **Claude** which skills and agents are relevant. Claude infers from a rule-based system and decides which tools to use.
+**You don't need to memorize slash commands**. Just describe what you want naturally.
 
 ```
-> "Fix the login bug in auth.py"
+User: "Fix the login bug in auth.py"
 
 🎯 SKILL ACTIVATION CHECK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -114,7 +95,7 @@ ACTION: Use Skill tool BEFORE responding
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Priority Levels
+### 2.4 Priority Levels
 
 | Level | Meaning |
 |-------|---------|
@@ -123,99 +104,11 @@ ACTION: Use Skill tool BEFORE responding
 | 💡 **SUGGESTED** | Consider using (e.g., optimization tools) |
 | 📌 **OPTIONAL** | Nice to have (e.g., documentation helpers) |
 
-### Natural Language Examples
-
-| What You Say | What Activates |
-|--------------|----------------|
-| "Fix the broken login" | `/fix` workflow → debug-agent, scout |
-| "Build a user dashboard" | `/build` workflow → plan-agent, kraken |
-| "I want to understand this codebase" | `/explore` + scout agent |
-| "What could go wrong with this plan?" | `/premortem` |
-| "Help me figure out what I need" | `/discovery-interview` |
-| "Done for today" | `create_handoff` (critical) |
-| "Resume where we left off" | `resume_handoff` |
-| "Research auth patterns" | oracle agent + perplexity |
-| "Find all usages of this API" | scout agent + ast-grep |
-
-### Why This Approach?
-
-| Benefit | How |
-|---------|-----|
-| **More Discoverable** | Don't need to know commands exist |
-| **Context-Aware** | System knows when you're 90% through context |
-| **Reduces Cognitive Load** | Describe intent naturally, get curated suggestions |
-| **Power User Friendly** | Still supports /fix, /build, etc. directly |
-
-### Skill vs Workflow vs Agent
-
-| Type | Purpose | Example |
-|------|---------|---------|
-| **Skill** | Single-purpose tool | `commit`, `tldr-code`, `qlty-check` |
-| **Workflow** | Multi-step process | `/fix` (sleuth → premortem → kraken → commit) |
-| **Agent** | Specialized sub-session | scout (exploration), oracle (research) |
-
-[See detailed skill activation docs →](docs/skill-activation.md)
-
 ---
 
-## Quick Start
+## 3. Core Architecture
 
-### Prerequisites
-
-- Python 3.11+
-- [uv](https://github.com/astral-sh/uv) package manager
-- Docker (for PostgreSQL)
-- Claude Code CLI
-
-### Installation
-
-```bash
-# Clone
-git clone https://github.com/parcadei/Continuous-Claude-v3.git
-cd Continuous-Claude-v3/opc
-
-# Run setup wizard (12 steps)
-uv run python -m scripts.setup.wizard
-```
-
-> **Note:** The `pyproject.toml` is in `opc/`. Always run `uv` commands from the `opc/` directory.
-
-### What the Wizard Does
-
-| Step | What It Does |
-|------|--------------|
-| 1 | Backup existing .claude/ config (if present) |
-| 2 | Check prerequisites (Docker, Python, uv) |
-| 3-5 | Database + API key configuration |
-| 6-7 | Start Docker stack, run migrations |
-| 8 | Install Claude Code integration (32 agents, 109 skills, 30 hooks) |
-| 9 | Math features (SymPy, Z3, Pint - optional) |
-| 10 | TLDR code analysis tool |
-| 11-12 | Diagnostics tools + Loogle (optional) |
-
-### First Session
-
-```bash
-# Start Claude Code
-claude
-
-# Try a workflow
-> /workflow
-```
-
-### First Session Commands
-
-| Command | What it does |
-|---------|--------------|
-| `/workflow` | Goal-based routing (Research/Plan/Build/Fix) |
-| `/fix bug <description>` | Investigate and fix a bug |
-| `/build greenfield <feature>` | Build a new feature from scratch |
-| `/explore` | Understand the codebase |
-| `/premortem` | Risk analysis before implementation |
-
----
-
-## Architecture
+### 3.1 System Architecture Diagram
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -243,7 +136,7 @@ claude
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Data Flow: Session Lifecycle
+### 3.2 Data Flow: Session Lifecycle
 
 ```
 SessionStart                    Working                      SessionEnd
@@ -257,16 +150,16 @@ SessionStart                    Working                      SessionEnd
     ├── Continuity ledger          ├── File claims               ├── Handoff
     ├── Memory recall              ├── TLDR indexing             ├── Learnings
     └── Symbol index               └── Blackboard                └── Outcome
-                                         │
-                                         ▼
-                                    ┌─────────┐
-                                    │ /clear  │
-                                    │ Fresh   │
-                                    │ context │
-                                    └─────────┘
+                                          │
+                                          ▼
+                                     ┌─────────┐
+                                     │ /clear  │
+                                     │ Fresh   │
+                                     │ context │
+                                     └─────────┘
 ```
 
-### The Continuity Loop (Detailed)
+### 3.3 The Continuity Loop (Detailed)
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -308,59 +201,7 @@ SessionStart                    Working                      SessionEnd
                           Fresh context + state preserved
 ```
 
-### Workflow Chains
-
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           META-SKILL WORKFLOWS                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-  /fix bug                              /build greenfield
-  ─────────                             ─────────────────
-  ┌──────────┐  ┌──────────┐            ┌──────────┐  ┌──────────┐
-  │  sleuth  │─▶│ premortem│            │discovery │─▶│plan-agent│
-  │(diagnose)│  │  (risk)  │            │(clarify) │  │ (design) │
-  └──────────┘  └────┬─────┘            └──────────┘  └────┬─────┘
-                     │                                      │
-                     ▼                                      ▼
-              ┌──────────┐                          ┌──────────┐
-              │  kraken  │                          │ validate │
-              │  (fix)   │                          │ (check)  │
-              └────┬─────┘                          └────┬─────┘
-                   │                                      │
-                   ▼                                      ▼
-              ┌──────────┐                          ┌──────────┐
-              │  arbiter │                          │  kraken  │
-              │ (test)   │                          │(implement│
-              └────┬─────┘                          └────┬─────┘
-                   │                                      │
-                   ▼                                      ▼
-              ┌──────────┐                          ┌──────────┐
-              │  commit  │                          │  commit  │
-              └──────────┘                          └──────────┘
-
-
-  /tdd                                  /refactor
-  ────                                  ─────────
-  ┌──────────┐  ┌──────────┐            ┌──────────┐  ┌──────────┐
-  │plan-agent│─▶│  arbiter │            │ phoenix  │─▶│  warden  │
-  │ (design) │  │(tests 🔴)│            │(analyze) │  │ (review) │
-  └──────────┘  └────┬─────┘            └──────────┘  └────┬─────┘
-                     │                                      │
-                     ▼                                      ▼
-              ┌──────────┐                          ┌──────────┐
-              │  kraken  │                          │  kraken  │
-              │(code 🟢) │                          │(transform│
-              └────┬─────┘                          └────┬─────┘
-                   │                                      │
-                   ▼                                      ▼
-              ┌──────────┐                          ┌──────────┐
-              │  arbiter │                          │  judge   │
-              │(verify ✓)│                          │ (review) │
-              └──────────┘                          └──────────┘
-```
-
-### Data Layer Architecture
+### 3.4 Data Layer Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -406,9 +247,9 @@ SessionStart                    Working                      SessionEnd
 
 ---
 
-## Core Systems
+## 4. Main Components
 
-### Skills System
+### 4.1 Skills System (109 Skills)
 
 Skills are modular capabilities triggered by natural language. Located in `.claude/skills/`.
 
@@ -425,68 +266,6 @@ Skills are modular capabilities triggered by natural language. Located in `.clau
 | `/explore` | scout (quick/deep/architecture) | Understand codebase |
 | `/security` | vulnerability scan → verification | Security audits |
 | `/release` | audit → E2E → review → changelog | Ship releases |
-
-#### Meta-Skill Reference
-
-Each meta-skill supports modes, scopes, and flags. Type the skill alone (e.g., `/build`) to get an interactive question flow.
-
-**`/build <mode> [options] [description]`**
-
-| Mode | Chain | Use For |
-|------|-------|---------|
-| `greenfield` | discovery → plan → validate → implement → commit → PR | New feature from scratch |
-| `brownfield` | onboard → research → plan → validate → implement | Feature in existing codebase |
-| `tdd` | plan → test-first → implement | Test-driven development |
-| `refactor` | impact analysis → plan → TDD → implement | Safe refactoring |
-
-| Option | Effect |
-|--------|--------|
-| `--skip-discovery` | Skip interview phase (have clear spec) |
-| `--skip-validate` | Skip plan validation |
-| `--skip-commit` | Don't auto-commit |
-| `--skip-pr` | Don't create PR description |
-| `--parallel` | Run research agents in parallel |
-
-**`/fix <scope> [options] [description]`**
-
-| Scope | Chain | Use For |
-|-------|-------|---------|
-| `bug` | debug → implement → test → commit | General bug fix |
-| `hook` | debug-hooks → hook-developer → implement → test | Hook issues |
-| `deps` | preflight → oracle → plan → implement → qlty | Dependency errors |
-| `pr-comments` | github-search → research → plan → implement → commit | PR feedback |
-
-| Option | Effect |
-|--------|--------|
-| `--no-test` | Skip regression test |
-| `--dry-run` | Diagnose only, don't fix |
-| `--no-commit` | Don't auto-commit |
-
-**`/explore <depth> [options]`**
-
-| Depth | Time | What It Does |
-|-------|------|--------------|
-| `quick` | ~1 min | tldr tree + structure overview |
-| `deep` | ~5 min | onboard + tldr + research + documentation |
-| `architecture` | ~3 min | tldr arch + call graph + layers |
-
-| Option | Effect |
-|--------|--------|
-| `--focus "area"` | Focus on specific area (e.g., `--focus "auth"`) |
-| `--output handoff` | Create handoff for implementation |
-| `--output doc` | Create documentation file |
-| `--entry "func"` | Start from specific entry point |
-
-**`/tdd`, `/refactor`, `/review`, `/security`, `/release`**
-
-These follow their defined chains without mode flags. Just run:
-```
-/tdd "implement retry logic"
-/refactor "extract auth module"
-/review                           # reviews current changes
-/security "authentication code"
-/release v1.2.0
-```
 
 #### Key Skills (High-Value Tools)
 
@@ -519,9 +298,7 @@ These follow their defined chains without mode flags. Just run:
 - **pint-compute**: Unit-aware arithmetic and conversions
 - **shapely-compute**: Computational geometry
 
-The `/prove` skill enables machine-verified proofs without learning Lean syntax. Used to create the first Lean formalization of Sylvester-Gallai theorem.
-
-#### The Thought Process
+#### Decision Tree
 
 ```
 What do I want to do?
@@ -537,17 +314,11 @@ What do I want to do?
 └── Shipping → /release
 ```
 
-[See detailed skills breakdown →](docs/skills/)
-
----
-
-### Agents System
+### 4.2 Agents System (32 Agents)
 
 Agents are specialized AI workers spawned via the Task tool. Located in `.claude/agents/`.
 
-#### Agent Categories (32 active)
-
-> **Note:** There are likely too many agents—consolidation is a v4 goal. Use what fits your workflow.
+#### Agent Categories
 
 **Orchestrators (2)**
 - **maestro**: Multi-agent coordination with patterns (Pipeline, Swarm, Jury)
@@ -589,15 +360,11 @@ Agents are specialized AI workers spawned via the Task tool. Located in `.claude
 | Refactoring | phoenix → plan-reviewer → kraken → judge → arbiter |
 | Bug Fix | sleuth → spark/kraken → arbiter → scribe |
 
-[See detailed agent guide →](docs/agents/)
-
----
-
-### Hooks System
+### 4.3 Hooks System (30 Hooks)
 
 Hooks intercept Claude Code at lifecycle points. Located in `.claude/hooks/`.
 
-#### Hook Events (30 hooks total)
+#### Hook Events
 
 | Event | Key Hooks | Purpose |
 |-------|-----------|---------|
@@ -618,11 +385,7 @@ Hooks intercept Claude Code at lifecycle points. Located in `.claude/hooks/`.
 | **post-edit-diagnostics** | Runs pyright/ruff after edits |
 | **memory-awareness** | Surfaces relevant learnings |
 
-[See all 30 hooks →](docs/hooks/)
-
----
-
-### TLDR Code Analysis
+### 4.4 TLDR Code Analysis
 
 TLDR provides token-efficient code summaries through 5 analysis layers.
 
@@ -671,29 +434,7 @@ Beyond structural analysis, TLDR builds a **semantic index** of your codebase:
 - **Auto-rebuild** — Dirty flag hook tracks file changes; index rebuilds after N edits
 - **Selective indexing** — Use `.tldrignore` to control what gets indexed
 
-```bash
-# .tldrignore example
-__pycache__/
-*.test.py
-node_modules/
-.venv/
-```
-
-The semantic index uses all 5 layers plus 10 lines of surrounding code context—not just docstrings.
-
-#### Hook Integration
-
-TLDR is automatically integrated via hooks:
-
-- **tldr-read-enforcer**: Returns L1+L2+L3 instead of full file reads
-- **smart-search-router**: Routes Grep to `tldr search`
-- **post-tool-use-tracker**: Updates indexes when files change
-
-[See TLDR documentation →](opc/packages/tldr-code/)
-
----
-
-### Memory System
+### 4.5 Memory System
 
 Cross-session learning powered by PostgreSQL + pgvector.
 
@@ -726,28 +467,7 @@ The key insight: **thinking blocks contain the real reasoning**—not just what 
 | **archival_memory** | Long-term learnings with BGE embeddings |
 | **handoffs** | Session handoffs with embeddings |
 
-#### Recall Commands
-
-```bash
-# Recall learnings (hybrid text + vector search)
-cd opc && uv run python scripts/core/recall_learnings.py \
-    --query "authentication patterns"
-
-# Store a learning explicitly
-cd opc && uv run python scripts/core/store_learning.py \
-    --session-id "my-session" \
-    --type WORKING_SOLUTION \
-    --content "What I learned" \
-    --confidence high
-```
-
-#### Automatic Memory
-
-The **memory-awareness** hook surfaces relevant learnings when you send a message. You'll see `MEMORY MATCH` indicators—Claude can use these without you asking.
-
----
-
-### Continuity System
+### 4.6 Continuity System
 
 Preserve state across context clears and sessions.
 
@@ -798,202 +518,126 @@ status: complete
 2. Write integration tests
 ```
 
-#### Commands
-
-| Command | Effect |
-|---------|--------|
-| "save state" | Updates continuity ledger |
-| "done for today" / `/handoff` | Creates handoff document |
-| "resume work" | Loads latest handoff |
-
 ---
 
-### Math System
+## 5. Workflows
 
-Two capabilities: **computation** (SymPy, Z3, Pint) and **formal verification** (Lean4 + Mathlib).
+### 5.1 Workflow Chains
 
-#### The Stack
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           META-SKILL WORKFLOWS                              │
+└─────────────────────────────────────────────────────────────────────────────┘
 
-| Tool | Purpose | Example |
+  /fix bug                              /build greenfield
+  ─────────                             ─────────────────
+  ┌──────────┐  ┌──────────┐            ┌──────────┐  ┌──────────┐
+  │  sleuth  │─▶│ premortem│            │discovery │─▶│plan-agent│
+  │(diagnose)│  │  (risk)  │            │(clarify) │  │ (design) │
+  └──────────┘  └────┬─────┘            └──────────┘  └────┬─────┘
+                     │                                      │
+                     ▼                                      ▼
+              ┌──────────┐                          ┌──────────┐
+              │  kraken  │                          │ validate │
+              │  (fix)   │                          │ (check)  │
+              └────┬─────┘                          └────┬─────┘
+                   │                                      │
+                   ▼                                      ▼
+              ┌──────────┐                          ┌──────────┐
+              │  arbiter │                          │  kraken  │
+              │ (test)   │                          │(implement│
+              └────┬─────┘                          └────┬─────┘
+                   │                                      │
+                   ▼                                      ▼
+              ┌──────────┐                          ┌──────────┐
+              │  commit  │                          │  commit  │
+              └──────────┘                          └──────────┘
+```
+
+### 5.2 Natural Language Examples
+
+| What You Say | What Activates |
+|--------------|----------------|
+| "Fix the broken login" | `/fix` workflow → debug-agent, scout |
+| "Build a user dashboard" | `/build` workflow → plan-agent, kraken |
+| "I want to understand this codebase" | `/explore` + scout agent |
+| "What could go wrong with this plan?" | `/premortem` |
+| "Help me figure out what I need" | `/discovery-interview` |
+| "Done for today" | `create_handoff` (critical) |
+| "Resume where we left off" | `resume_handoff` |
+| "Research auth patterns" | oracle agent + perplexity |
+| "Find all usages of this API" | scout agent + ast-grep |
+
+### 5.3 Skill vs Workflow vs Agent
+
+| Type | Purpose | Example |
 |------|---------|---------|
-| **SymPy** | Symbolic math | Solve equations, integrals, matrix operations |
-| **Z3** | Constraint solving | Prove inequalities, SAT problems |
-| **Pint** | Unit conversion | Convert miles to km, dimensional analysis |
-| **Lean4** | Formal proofs | Machine-verified theorems |
-| **Mathlib** | 100K+ theorems | Pre-formalized lemmas to build on |
-| **Loogle** | Type-aware search | Find Mathlib lemmas by signature |
-
-#### Two Entry Points
-
-| Skill | Use When |
-|-------|----------|
-| `/math` | Computing, solving, calculating |
-| `/prove` | Formal verification, machine-checked proofs |
-
-#### /math Examples
-
-```bash
-# Solve equation
-"Solve x² - 4 = 0"  →  x = ±2
-
-# Compute eigenvalues
-"Eigenvalues of [[2,1],[1,2]]"  →  {1: 1, 3: 1}
-
-# Prove inequality
-"Is x² + y² ≥ 2xy always true?"  →  PROVED (equals (x-y)²)
-
-# Convert units
-"26.2 miles to km"  →  42.16 km
-```
-
-#### /prove - Formal Verification
-
-5-phase workflow for machine-verified proofs:
-
-```
-📚 RESEARCH → 🏗️ DESIGN → 🧪 TEST → ⚙️ IMPLEMENT → ✅ VERIFY
-```
-
-1. **Research**: Search Mathlib with Loogle, find proof strategy
-2. **Design**: Create skeleton with `sorry` placeholders
-3. **Test**: Search for counterexamples before proving
-4. **Implement**: Fill sorries with compiler-in-the-loop feedback
-5. **Verify**: Audit axioms, confirm zero sorries
-
-```
-/prove every group homomorphism preserves identity
-/prove continuous functions on compact sets are uniformly continuous
-```
-
-**Achievement**: Used to create the first Lean formalization of the Sylvester-Gallai theorem.
-
-#### Prerequisites (Optional)
-
-Math features require installation via wizard step 9:
-
-```bash
-# Installed automatically by wizard
-uv pip install sympy z3-solver pint shapely
-
-# Lean4 (for /prove)
-curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh
-```
+| **Skill** | Single-purpose tool | `commit`, `tldr-code`, `qlty-check` |
+| **Workflow** | Multi-step process | `/fix` (sleuth → premortem → kraken → commit) |
+| **Agent** | Specialized sub-session | scout (exploration), oracle (research) |
 
 ---
 
-## Workflows
+## 6. Quick Start
 
-### /workflow - Goal-Based Router
+### 6.1 Prerequisites
 
-```
-> /workflow
+- Python 3.11+
+- [uv](https://github.com/astral-sh/uv) package manager
+- Docker (for PostgreSQL)
+- Claude Code CLI
 
-? What's your goal?
-  ○ Research - Understand codebase/docs
-  ○ Plan - Design implementation approach
-  ○ Build - Implement features
-  ○ Fix - Investigate and resolve issues
-```
-
-### /fix - Bug Resolution
-
-```bash
-/fix bug "login fails silently"
-```
-
-**Chain:** sleuth → [checkpoint] → [premortem] → kraken → test → commit
-
-| Scope | What it does |
-|-------|--------------|
-| `bug` | General bug investigation |
-| `hook` | Hook-specific debugging |
-| `deps` | Dependency issues |
-| `pr-comments` | Address PR feedback |
-
-### /build - Feature Development
-
-```bash
-/build greenfield "user dashboard"
-```
-
-**Chain:** discovery → plan → validate → implement → commit → PR
-
-| Mode | What it does |
-|------|--------------|
-| `greenfield` | New feature from scratch |
-| `brownfield` | Modify existing codebase |
-| `tdd` | Test-first development |
-| `refactor` | Safe code transformation |
-
-### /premortem - Risk Analysis
-
-```bash
-/premortem deep thoughts/shared/plans/feature-x.md
-```
-
-**Output:**
-- **TIGERS**: Clear threats (HIGH/MEDIUM/LOW severity)
-- **ELEPHANTS**: Unspoken concerns
-
-Blocks on HIGH severity until user accepts/mitigates risks.
-
----
-
-## Installation
-
-### Full Installation (Recommended)
+### 6.2 Installation
 
 ```bash
 # Clone
-git clone https://github.com/parcadei/continuous-claude.git
-cd continuous-claude/opc
+git clone https://github.com/parcadei/Continuous-Claude-v3.git
+cd Continuous-Claude-v3/opc
 
-# Run the setup wizard
+# Run setup wizard (12 steps)
 uv run python -m scripts.setup.wizard
 ```
 
-The wizard walks you through all configuration options interactively.
+### 6.3 What the Wizard Does
 
-## Updating
+| Step | What It Does |
+|------|--------------|
+| 1 | Backup existing .claude/ config (if present) |
+| 2 | Check prerequisites (Docker, Python, uv) |
+| 3-5 | Database + API key configuration |
+| 6-7 | Start Docker stack, run migrations |
+| 8 | Install Claude Code integration (32 agents, 109 skills, 30 hooks) |
+| 9 | Math features (SymPy, Z3, Pint - optional) |
+| 10 | TLDR code analysis tool |
+| 11-12 | Diagnostics tools + Loogle (optional) |
 
-Pull latest changes and sync your installation:
+### 6.4 First Session
 
 ```bash
-cd continuous-claude/opc
-uv run python -m scripts.setup.update
+# Start Claude Code
+claude
+
+# Try a workflow
+> /workflow
 ```
 
-This will:
-- Pull latest from GitHub
-- Update hooks, skills, rules, agents
-- Upgrade TLDR if installed
-- Rebuild TypeScript hooks if changed
+### 6.5 First Session Commands
 
-### What Gets Installed
-
-| Component | Location |
-|-----------|----------|
-| Agents (32) | ~/.claude/agents/ |
-| Skills (109) | ~/.claude/skills/ |
-| Hooks (30) | ~/.claude/hooks/ |
-| Rules | ~/.claude/rules/ |
-| Scripts | ~/.claude/scripts/ |
-| PostgreSQL | Docker container |
-
-### For Brownfield Projects
-
-After installation, start Claude and run:
-```
-> /onboard
-```
-
-This analyzes the codebase and creates an initial continuity ledger.
+| Command | What it does |
+|---------|--------------|
+| `/workflow` | Goal-based routing (Research/Plan/Build/Fix) |
+| `/fix bug <description>` | Investigate and fix a bug |
+| `/build greenfield <feature>` | Build a new feature from scratch |
+| `/explore` | Understand the codebase |
+| `/premortem` | Risk analysis before implementation |
 
 ---
 
-## Configuration
+## 7. Usage Guide
 
-### .claude/settings.json
+### 7.1 Configuration
+
+#### .claude/settings.json
 
 Central configuration for hooks, tools, and workflows.
 
@@ -1008,7 +652,7 @@ Central configuration for hooks, tools, and workflows.
 }
 ```
 
-### .claude/skills/skill-rules.json
+#### .claude/skills/skill-rules.json
 
 Skill activation triggers.
 
@@ -1024,7 +668,7 @@ Skill activation triggers.
 }
 ```
 
-### Environment Variables
+### 7.2 Environment Variables
 
 | Variable | Purpose | Required |
 |----------|---------|----------|
@@ -1039,14 +683,12 @@ Services without API keys still work:
 - Local git operations
 - TDD workflow
 
----
-
-## Directory Structure
+### 7.3 Directory Structure
 
 ```
 continuous-claude/
 ├── .claude/
-│   ├── agents/           # 32 specialized AI agents
+│   ├── agents/           # 32 specialized agents
 │   ├── hooks/            # 30 lifecycle hooks
 │   │   ├── src/          # TypeScript source
 │   │   └── dist/         # Compiled JavaScript
@@ -1070,9 +712,184 @@ continuous-claude/
 └── docs/                 # Documentation
 ```
 
+### 7.4 Updating
+
+Pull latest changes and sync your installation:
+
+```bash
+cd continuous-claude/opc
+uv run python -m scripts.setup.update
+```
+
+This will:
+- Pull latest from GitHub
+- Update hooks, skills, rules, agents
+- Upgrade TLDR if installed
+- Rebuild TypeScript hooks if changed
+
+### 7.5 For Brownfield Projects
+
+After installation, start Claude and run:
+```
+> /onboard
+```
+
+This analyzes the codebase and creates an initial continuity ledger.
+
 ---
 
-## Contributing
+## 8. Technology Stack
+
+### 8.1 Core Technologies
+
+| Component | Technology |
+|-----------|------------|
+| **Languages** | Python 3.11+, TypeScript |
+| **AI Models** | Claude 3.5 Sonnet, Claude 3 Opus |
+| **Database** | PostgreSQL + pgvector |
+| **Vector Embeddings** | BGE-large-en-v1.5 (1024-dim) |
+| **Code Parsing** | tree-sitter |
+| **Package Management** | uv (Python), npm (TypeScript) |
+| **Containerization** | Docker, Docker Compose |
+
+### 8.2 Dependencies and Tools
+
+**Core Tools**
+- **[uv](https://github.com/astral-sh/uv)** - Python packaging
+- **[tree-sitter](https://tree-sitter.github.io/)** - Code parsing
+- **[Braintrust](https://braintrust.dev)** - LLM evaluation, logging, and session tracing
+- **[qlty](https://github.com/qltysh/qlty)** - Universal code quality CLI (70+ linters)
+- **[ast-grep](https://github.com/ast-grep/ast-grep)** - AST-based code search and refactoring
+
+**Optional Services**
+- **[Nia](https://trynia.ai)** - Library documentation search
+- **[Morph](https://www.morphllm.com)** - WarpGrep fast code search
+- **[Firecrawl](https://www.firecrawl.dev)** - Web scraping API
+- **[RepoPrompt](https://repoprompt.com)** - Token-efficient codebase maps
+
+### 8.3 Math and Formal Verification
+
+| Tool | Purpose | Example |
+|------|---------|---------|
+| **SymPy** | Symbolic math | Solve equations, integrals, matrix operations |
+| **Z3** | Constraint solving | Prove inequalities, SAT problems |
+| **Pint** | Unit conversion | Convert miles to km, dimensional analysis |
+| **Lean4** | Formal proofs | Machine-verified theorems |
+| **Mathlib** | 100K+ theorems | Pre-formalized lemmas to build on |
+| **Loogle** | Type-aware search | Find Mathlib lemmas by signature |
+
+### 8.4 Database Schema
+
+**PostgreSQL Tables (4)**
+
+```sql
+-- Session tracking
+CREATE TABLE sessions (
+    session_id TEXT PRIMARY KEY,
+    heartbeat TIMESTAMPTZ,
+    terminal_id TEXT,
+    status TEXT
+);
+
+-- File locking
+CREATE TABLE file_claims (
+    file_path TEXT PRIMARY KEY,
+    session_id TEXT,
+    claimed_at TIMESTAMPTZ
+);
+
+-- Long-term memory (with vector embeddings)
+CREATE TABLE archival_memory (
+    id SERIAL PRIMARY KEY,
+    session_id TEXT,
+    content TEXT,
+    embedding vector(1024),  -- BGE-large-en-v1.5
+    created_at TIMESTAMPTZ,
+    confidence TEXT,
+    type TEXT
+);
+
+-- Session handoffs
+CREATE TABLE handoffs (
+    id SERIAL PRIMARY KEY,
+    session_name TEXT,
+    content TEXT,
+    embedding vector(1024),
+    created_at TIMESTAMPTZ
+);
+```
+
+### 8.5 File Formats
+
+**Continuity Ledger (Markdown)**
+```markdown
+# Session: <name>
+Updated: <timestamp>
+
+## Goal
+...
+
+## Completed
+- [x] Task 1
+
+## In Progress
+- [ ] Task 2
+```
+
+**Handoff (YAML + Markdown)**
+```yaml
+---
+date: 2026-01-08T15:26:01+0000
+session_name: feature-x
+status: complete
+---
+
+# Handoff: <title>
+
+## Task(s)
+| Task | Status |
+|------|--------|
+| ... | ... |
+```
+
+---
+
+## 9. Key Statistics
+
+| Metric | Count | Notes |
+|--------|-------|-------|
+| Python functions | 2,328 | Across all `opc/scripts/` |
+| TypeScript hooks | 34 | Active in `.claude/hooks/src/` |
+| Skills | 109 | In `.claude/skills/` |
+| Agents | 32 | Defined in system prompt |
+| Tests | 265+ | TLDR-code alone |
+| Token savings | 95% | TLDR vs raw file reads |
+| Circular dependencies | 0 | Resolved by archiving scope modules |
+| Most called function | get_connection | 38 callers |
+
+---
+
+## 10. Achievements
+
+### 10.1 Sylvester-Gallai Theorem
+
+Used the `/prove` skill to create the **first Lean formalization** of the Sylvester-Gallai theorem.
+
+### 10.2 Token Efficiency
+
+- **95% token savings**: TLDR 5-layer analysis vs reading raw files
+- **1,200 tokens** vs **23,000 tokens**
+
+### 10.3 System Complexity
+
+- **109 skills** triggered by natural language
+- **32 agents** as specialized sub-assistants
+- **30 hooks** for automatic behaviors
+- **5-layer code analysis**
+
+---
+
+## 11. Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 
@@ -1083,39 +900,45 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on:
 
 ---
 
-## Acknowledgments
-
-### Patterns & Architecture
-- **[@numman-ali](https://github.com/numman-ali)** - Continuity ledger pattern
-- **[Anthropic](https://anthropic.com)** - Claude Code and "Code Execution with MCP"
-- **[obra/superpowers](https://github.com/obra/superpowers)** - Agent orchestration patterns
-- **[EveryInc/compound-engineering-plugin](https://github.com/EveryInc/compound-engineering-plugin)** - Compound engineering workflow
-- **[yoloshii/mcp-code-execution-enhanced](https://github.com/yoloshii/mcp-code-execution-enhanced)** - Enhanced MCP execution
-- **[HumanLayer](https://github.com/humanlayer/humanlayer)** - Agent patterns
-
-### Tools & Services
-- **[uv](https://github.com/astral-sh/uv)** - Python packaging
-- **[tree-sitter](https://tree-sitter.github.io/)** - Code parsing
-- **[Braintrust](https://braintrust.dev)** - LLM evaluation, logging, and session tracing
-- **[qlty](https://github.com/qltysh/qlty)** - Universal code quality CLI (70+ linters)
-- **[ast-grep](https://github.com/ast-grep/ast-grep)** - AST-based code search and refactoring
-- **[Nia](https://trynia.ai)** - Library documentation search
-- **[Morph](https://www.morphllm.com)** - WarpGrep fast code search
-- **[Firecrawl](https://www.firecrawl.dev)** - Web scraping API
-- **[RepoPrompt](https://repoprompt.com)** - Token-efficient codebase maps
-
----
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=parcadei/Continuous-Claude-v2&type=timeline)](https://star-history.com/#parcadei/Continuous-Claude-v2&Date)
-
----
-
-## License
+## 12. License
 
 [MIT](LICENSE) - Use freely, contribute back.
 
 ---
 
-**Continuous Claude**: Not just a coding assistant—a persistent, learning, multi-agent development environment that gets smarter with every session.
+## 13. Summary
+
+**Continuous Claude** is not just a coding assistant—it's a persistent, learning, multi-agent development environment that gets smarter with every session.
+
+### Core Advantages
+
+1. **Persistent Memory**: Cross-session learning and context retention
+2. **Token Efficiency**: 95% token savings through intelligent code analysis
+3. **Specialized Agents**: 32 expert agents for complex tasks
+4. **Natural Interaction**: No need to memorize commands, just describe your goals
+5. **Automatic Learning**: Daemon extracts insights and builds knowledge base
+
+### Use Cases
+
+- ✅ Large codebase exploration and understanding
+- ✅ Complex feature development (requiring planning and coordination)
+- ✅ Bug investigation and fixing
+- ✅ Code refactoring and architecture improvements
+- ✅ Formal verification and mathematical proofs
+- ✅ Long-term projects across sessions
+
+### Get Started
+
+```bash
+git clone https://github.com/parcadei/Continuous-Claude-v3.git
+cd Continuous-Claude-v3/opc
+uv run python -m scripts.setup.wizard
+```
+
+In just 5 minutes, you'll have an intelligent, persistent, continuously learning AI development partner.
+
+---
+
+*This report was generated based on analysis of the Continuous Claude v3 codebase, covering architecture, components, workflows, and usage methods.*
+
+*Generated: 2026-01-12*
